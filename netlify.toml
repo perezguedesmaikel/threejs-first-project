@@ -11,7 +11,7 @@
   NPM_FLAGS = "--legacy-peer-deps"
 
 # Enable the Next.js runtime (Edge/SSR) on Netlify
-[plugins]
+[[plugins]]
   package = "@netlify/plugin-nextjs"
 
 # Redirect all requests to Next.js handler (for client-side routing)
