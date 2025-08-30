@@ -47,6 +47,7 @@ function Lights() {
 export default function HomePage() {
   const [bossIsPresent, setBossIsPresent] = useState(false)
   const [employeesAreDancing, setEmployeesAreDancing] = useState(true)
+  const [bossHasArrived, setBossHasArrived] = useState(false)
 
   // Boss arrives after 5 seconds
   useEffect(() => {
@@ -59,6 +60,10 @@ export default function HomePage() {
 
   // When boss arrives, employees stop dancing and go to work
   const handleBossArrival = () => {
+    console.log('🚨 Boss has arrived! Switching employees to work mode...')
+    setBossHasArrived(true)
+    // Immediately stop dancing - no delay
+    console.log('⏰ Setting employeesAreDancing to false immediately')
     setEmployeesAreDancing(false)
   }
 
@@ -74,20 +79,25 @@ export default function HomePage() {
         backgroundColor: 'rgba(0,0,0,0.8)',
         padding: '15px',
         borderRadius: '8px',
-        maxWidth: '300px'
+        maxWidth: '320px'
       }}>
         <h3 style={{ margin: '0 0 10px 0' }}>🎉 Escena de Oficina</h3>
         {employeesAreDancing ? (
           <div>
             <p style={{ margin: '5px 0' }}>🕺 Los empleados están bailando...</p>
             <p style={{ margin: '5px 0', fontSize: '14px' }}>
-              {bossIsPresent ? '👔 ¡El jefe está llegando!' : '⏰ El jefe llegará pronto...'}
+              {bossIsPresent ? (
+                bossHasArrived ? '😱 ¡OH NO! ¡El jefe los vio!' : '👔 ¡El jefe está llegando!'
+              ) : '⏰ El jefe llegará pronto...'}
             </p>
           </div>
         ) : (
           <div>
-            <p style={{ margin: '5px 0' }}>💻 ¡Todos trabajando!</p>
-            <p style={{ margin: '5px 0', fontSize: '14px' }}>👔 El Estimado está supervisando</p>
+            <p style={{ margin: '5px 0' }}>💻 ¡Todos trabajando duro!</p>
+            <p style={{ margin: '5px 0', fontSize: '14px' }}>👔 El Estimado supervisa la oficina</p>
+            <p style={{ margin: '5px 0', fontSize: '12px', color: '#ffff99' }}>
+              {bossHasArrived && '(Corrieron a sus escritorios en pánico 😅)'}
+            </p>
           </div>
         )}
         <p style={{ margin: '10px 0 0 0', fontSize: '12px', opacity: 0.8 }}>
@@ -133,21 +143,15 @@ export default function HomePage() {
         {/* Office Environment with workstations */}
         <OfficeEnvironment />
 
-        {/* Ground plane */}
-        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.1, 0]} receiveShadow>
-          <planeGeometry args={[50, 50]} />
-          <meshStandardMaterial color="#f0f0f0" />
-        </mesh>
-
         <OrbitControls
           makeDefault
           enablePan={true}
           enableZoom={true}
           enableRotate={true}
-          maxPolarAngle={Math.PI / 2}
-          minDistance={5}
-          maxDistance={25}
-          target={[0, 0, 0]}
+          maxPolarAngle={Math.PI / 2.2}
+          minDistance={3}
+          maxDistance={20}
+          target={[0, 1, 0]}
         />
         <StatsGl />
       </Canvas>

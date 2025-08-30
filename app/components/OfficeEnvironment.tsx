@@ -5,11 +5,6 @@ import * as THREE from 'three'
 export function OfficeEnvironment() {
   return (
     <group>
-      {/* Floor */}
-      {/*<mesh position={[0, -0.1, 0]} receiveShadow>*/}
-      {/*  <planeGeometry args={[20, 20]} />*/}
-      {/*  <meshStandardMaterial color="#e8e8e8" />*/}
-      {/*</mesh>*/}
 
       {/* Work Station 1 - Mondaca */}
       <group position={[-3, 0, 2]}>
