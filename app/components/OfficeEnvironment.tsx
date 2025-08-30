@@ -6,10 +6,10 @@ export function OfficeEnvironment() {
   return (
     <group>
       {/* Floor */}
-      <mesh position={[0, -0.1, 0]} receiveShadow>
-        <planeGeometry args={[20, 20]} />
-        <meshStandardMaterial color="#e8e8e8" />
-      </mesh>
+      {/*<mesh position={[0, -0.1, 0]} receiveShadow>*/}
+      {/*  <planeGeometry args={[20, 20]} />*/}
+      {/*  <meshStandardMaterial color="#e8e8e8" />*/}
+      {/*</mesh>*/}
 
       {/* Work Station 1 - Mondaca */}
       <group position={[-3, 0, 2]}>
@@ -125,8 +125,8 @@ export function OfficeEnvironment() {
         </mesh>
       </group>
 
-      {/* Office chairs for each workstation */}
-      <group position={[-3, 0, 3]}>
+      {/* Office chairs for each workstation - moved behind desks */}
+      <group position={[-3, 0, 3.5]}>
         <mesh position={[0, 0.5, 0]} castShadow>
           <cylinderGeometry args={[0.3, 0.3, 0.08]} />
           <meshStandardMaterial color="#2c3e50" />
@@ -137,7 +137,7 @@ export function OfficeEnvironment() {
         </mesh>
       </group>
 
-      <group position={[0, 0, 3]}>
+      <group position={[0, 0, 3.5]}>
         <mesh position={[0, 0.5, 0]} castShadow>
           <cylinderGeometry args={[0.3, 0.3, 0.08]} />
           <meshStandardMaterial color="#2c3e50" />
@@ -148,7 +148,7 @@ export function OfficeEnvironment() {
         </mesh>
       </group>
 
-      <group position={[3, 0, 3]}>
+      <group position={[3, 0, 3.5]}>
         <mesh position={[0, 0.5, 0]} castShadow>
           <cylinderGeometry args={[0.3, 0.3, 0.08]} />
           <meshStandardMaterial color="#2c3e50" />
@@ -189,18 +189,14 @@ export function OfficeEnvironment() {
         <meshStandardMaterial color="#708090" />
       </mesh>
 
-      {/* Walls */}
-      <mesh position={[0, 2, -8]} receiveShadow>
-        <planeGeometry args={[20, 4]} />
-        <meshStandardMaterial color="#f5f5f5" />
+      {/* Cabinet Drawers */}
+      <mesh position={[6.2, 0.7, -2]} castShadow>
+        <boxGeometry args={[0.05, 0.2, 0.4]} />
+        <meshStandardMaterial color="#555" />
       </mesh>
-      <mesh position={[-10, 2, 0]} rotation={[0, Math.PI / 2, 0]} receiveShadow>
-        <planeGeometry args={[16, 4]} />
-        <meshStandardMaterial color="#f5f5f5" />
-      </mesh>
-      <mesh position={[10, 2, 0]} rotation={[0, -Math.PI / 2, 0]} receiveShadow>
-        <planeGeometry args={[16, 4]} />
-        <meshStandardMaterial color="#f5f5f5" />
+      <mesh position={[6.2, 0.3, -2]} castShadow>
+        <boxGeometry args={[0.05, 0.2, 0.4]} />
+        <meshStandardMaterial color="#555" />
       </mesh>
     </group>
   )
