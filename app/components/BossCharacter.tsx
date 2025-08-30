@@ -163,17 +163,34 @@ export function BossCharacter({ position = [0, 0, 0], scale = 1, isPresent = fal
         <meshStandardMaterial color="#fdbcb4" />
       </mesh>
 
-      <mesh position={[0, 1.75, 0.2]}>
-        <ringGeometry args={[0.08, 0.12, 16]} />
-        <meshStandardMaterial color="#333" transparent opacity={0.3} />
+      {/* Beard - candado style (goatee) */}
+      <mesh position={[0, 1.55, 0.2]} castShadow>
+        <boxGeometry args={[0.12, 0.08, 0.06]} />
+        <meshStandardMaterial color="#2c3e50" />
       </mesh>
-      <mesh position={[-0.15, 1.75, 0.2]}>
-        <ringGeometry args={[0.08, 0.12, 16]} />
-        <meshStandardMaterial color="#333" transparent opacity={0.3} />
+      <mesh position={[0, 1.48, 0.18]} castShadow>
+        <boxGeometry args={[0.08, 0.06, 0.04]} />
+        <meshStandardMaterial color="#2c3e50" />
       </mesh>
-      <mesh position={[0.15, 1.75, 0.2]}>
-        <ringGeometry args={[0.08, 0.12, 16]} />
-        <meshStandardMaterial color="#333" transparent opacity={0.3} />
+
+      {/* Eyes (without glasses) */}
+      <mesh position={[-0.08, 1.75, 0.2]}>
+        <sphereGeometry args={[0.03, 8, 8]} />
+        <meshStandardMaterial color="#000" />
+      </mesh>
+      <mesh position={[0.08, 1.75, 0.2]}>
+        <sphereGeometry args={[0.03, 8, 8]} />
+        <meshStandardMaterial color="#000" />
+      </mesh>
+
+      {/* Eyebrows for more authority */}
+      <mesh position={[-0.08, 1.8, 0.18]} rotation={[0, 0, -0.2]}>
+        <boxGeometry args={[0.08, 0.02, 0.01]} />
+        <meshStandardMaterial color="#2c3e50" />
+      </mesh>
+      <mesh position={[0.08, 1.8, 0.18]} rotation={[0, 0, 0.2]}>
+        <boxGeometry args={[0.08, 0.02, 0.01]} />
+        <meshStandardMaterial color="#2c3e50" />
       </mesh>
 
       <mesh position={[0, 1, 0]} castShadow>

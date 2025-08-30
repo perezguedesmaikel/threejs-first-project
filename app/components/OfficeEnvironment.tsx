@@ -125,13 +125,13 @@ export function OfficeEnvironment() {
         </mesh>
       </group>
 
-      {/* Office chairs for each workstation - moved behind desks */}
+      {/* Office chairs for each workstation - positioned further back for better running effect */}
       <group position={[-3, 0, 3.5]}>
         <mesh position={[0, 0.5, 0]} castShadow>
           <cylinderGeometry args={[0.3, 0.3, 0.08]} />
           <meshStandardMaterial color="#2c3e50" />
         </mesh>
-        <mesh position={[0, 0.8, -0.25]} castShadow>
+        <mesh position={[0, 0.8, 0.25]} castShadow>
           <boxGeometry args={[0.5, 0.6, 0.08]} />
           <meshStandardMaterial color="#2c3e50" />
         </mesh>
@@ -142,7 +142,7 @@ export function OfficeEnvironment() {
           <cylinderGeometry args={[0.3, 0.3, 0.08]} />
           <meshStandardMaterial color="#2c3e50" />
         </mesh>
-        <mesh position={[0, 0.8, -0.25]} castShadow>
+        <mesh position={[0, 0.8, 0.25]} castShadow>
           <boxGeometry args={[0.5, 0.6, 0.08]} />
           <meshStandardMaterial color="#2c3e50" />
         </mesh>
@@ -153,7 +153,7 @@ export function OfficeEnvironment() {
           <cylinderGeometry args={[0.3, 0.3, 0.08]} />
           <meshStandardMaterial color="#2c3e50" />
         </mesh>
-        <mesh position={[0, 0.8, -0.25]} castShadow>
+        <mesh position={[0, 0.8, 0.25]} castShadow>
           <boxGeometry args={[0.5, 0.6, 0.08]} />
           <meshStandardMaterial color="#2c3e50" />
         </mesh>

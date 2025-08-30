@@ -48,6 +48,7 @@ export default function HomePage() {
   const [bossIsPresent, setBossIsPresent] = useState(false)
   const [employeesAreDancing, setEmployeesAreDancing] = useState(true)
   const [bossHasArrived, setBossHasArrived] = useState(false)
+  const [sceneStartTime, setSceneStartTime] = useState(Date.now())
 
   // Boss arrives after 5 seconds
   useEffect(() => {
@@ -56,7 +57,7 @@ export default function HomePage() {
     }, 5000)
 
     return () => clearTimeout(timer)
-  }, [])
+  }, [sceneStartTime]) // Reset when scene restarts
 
   // When boss arrives, employees stop dancing and go to work
   const handleBossArrival = () => {
@@ -67,8 +68,48 @@ export default function HomePage() {
     setEmployeesAreDancing(false)
   }
 
+  // Function to restart the entire scene
+  const restartScene = () => {
+    console.log('🔄 Restarting scene...')
+    setBossIsPresent(false)
+    setEmployeesAreDancing(true)
+    setBossHasArrived(false)
+    setSceneStartTime(Date.now()) // This will trigger useEffect to restart timer
+  }
+
   return (
     <main style={{ height: '100vh', width: '100vw' }}>
+      {/* Restart Button */}
+      <button
+        onClick={restartScene}
+        style={{
+          position: 'absolute',
+          top: '20px',
+          right: '20px',
+          zIndex: 100,
+          padding: '12px 20px',
+          fontSize: '16px',
+          fontWeight: 'bold',
+          backgroundColor: '#e74c3c',
+          color: 'white',
+          border: 'none',
+          borderRadius: '8px',
+          cursor: 'pointer',
+          boxShadow: '0 4px 8px rgba(0,0,0,0.3)',
+          transition: 'all 0.2s ease'
+        }}
+        onMouseEnter={(e) => {
+          e.target.style.backgroundColor = '#c0392b'
+          e.target.style.transform = 'scale(1.05)'
+        }}
+        onMouseLeave={(e) => {
+          e.target.style.backgroundColor = '#e74c3c'
+          e.target.style.transform = 'scale(1)'
+        }}
+      >
+        🔄 Reiniciar Escena
+      </button>
+
       <div style={{
         position: 'absolute',
         top: '20px',
@@ -88,7 +129,7 @@ export default function HomePage() {
             <p style={{ margin: '5px 0', fontSize: '14px' }}>
               {bossIsPresent ? (
                 bossHasArrived ? '😱 ¡OH NO! ¡El jefe los vio!' : '👔 ¡El jefe está llegando!'
-              ) : '⏰ El jefe llegará pronto...'}
+              ) : '⏰ El jefe llegará en 5 segundos...'}
             </p>
           </div>
         ) : (
@@ -101,7 +142,7 @@ export default function HomePage() {
           </div>
         )}
         <p style={{ margin: '10px 0 0 0', fontSize: '12px', opacity: 0.8 }}>
-          Usa el mouse para navegar por la escena
+          Usa el mouse para navegar. Haz clic en "Reiniciar" para ver de nuevo.
         </p>
       </div>
 
@@ -112,28 +153,29 @@ export default function HomePage() {
       >
         <Lights />
 
-        {/* The three dancing employees */}
+        {/* The three dancing employees - dancing in center area, then running to their chairs */}
         <Employee
           name="Mondaca"
-          position={[-2, 0, -1]}
+          position={[-1.5, 0, -2]}
           isDancing={employeesAreDancing}
-          workStation={[-3, 0, 2]}
+          workStation={[-3, 0, 3.5]}
         />
         <Employee
           name="Jorge"
-          position={[0, 0, -1]}
+          position={[0, 0, -2]}
           isDancing={employeesAreDancing}
-          workStation={[0, 0, 2]}
+          workStation={[0, 0, 3.5]}
         />
         <Employee
           name="Leo"
-          position={[2, 0, -1]}
+          position={[1.5, 0, -2]}
           isDancing={employeesAreDancing}
-          workStation={[3, 0, 2]}
+          workStation={[3, 0, 3.5]}
         />
 
         {/* The Boss Character */}
         <BossCharacter
+          key={sceneStartTime} // Force restart when scene resets
           position={[0, 0, -4]}
           scale={1.2}
           isPresent={bossIsPresent}
