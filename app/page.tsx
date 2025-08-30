@@ -1,5 +1,5 @@
-'use client'
 // @ts-nocheck
+'use client'
 
 import { Canvas, useThree } from '@react-three/fiber'
 import { OrbitControls, StatsGl } from '@react-three/drei'
