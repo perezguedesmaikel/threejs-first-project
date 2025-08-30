@@ -1,14 +1,26 @@
 'use client'
+// @ts-nocheck
 import { useRef, useState, useEffect } from 'react'
 import { useFrame } from '@react-three/fiber'
+import { Text } from '@react-three/drei'
 import * as THREE from 'three'
+
+// Ensure R3F intrinsic elements are recognized by TS during Next build
+import type { ThreeElements } from '@react-three/fiber'
+declare module 'react' {
+  namespace JSX {
+    interface IntrinsicElements extends ThreeElements {}
+  }
+}
 
 interface BossCharacterProps {
   position?: [number, number, number]
   scale?: number
+  isPresent?: boolean
+  onArrival?: () => void
 }
 
-export function BossCharacter({ position = [0, 0, 0], scale = 1 }: BossCharacterProps) {
+export function BossCharacter({ position = [0, 0, 0], scale = 1, isPresent = false, onArrival }: BossCharacterProps) {
   const groupRef = useRef<THREE.Group>(null!)
   const leftArmRef = useRef<THREE.Mesh>(null!)
   const rightArmRef = useRef<THREE.Mesh>(null!)
@@ -17,33 +29,58 @@ export function BossCharacter({ position = [0, 0, 0], scale = 1 }: BossCharacter
   const headRef = useRef<THREE.Mesh>(null!)
 
   // Animation states
-  const [currentAnimation, setCurrentAnimation] = useState<'idle' | 'walking' | 'gesturing' | 'pointing' | 'crossedArms' | 'talking'>('idle')
+  const [currentAnimation, setCurrentAnimation] = useState<'entering' | 'idle' | 'walking' | 'gesturing' | 'pointing' | 'crossedArms' | 'talking'>('entering')
   const [animationTime, setAnimationTime] = useState(0)
-  const [walkDirection, setWalkDirection] = useState(1)
+  const [hasArrived, setHasArrived] = useState(false)
   const [targetPosition, setTargetPosition] = useState(new THREE.Vector3(...position))
 
-  // Animation timers and randomization
+  // Boss entry animation
   useEffect(() => {
+    if (isPresent && !hasArrived) {
+      // Boss enters from the side
+      if (groupRef.current) {
+        groupRef.current.position.set(-10, position[1], position[2])
+        setCurrentAnimation('entering')
+
+        // Move to center
+        let progress = 0
+        const enterOffice = () => {
+          progress += 0.02
+          if (progress <= 1 && groupRef.current) {
+            const startX = -10
+            const endX = position[0]
+            const currentX = startX + (endX - startX) * progress
+            groupRef.current.position.x = currentX
+
+            if (progress >= 1) {
+              setHasArrived(true)
+              setCurrentAnimation('pointing')
+              onArrival?.()
+            } else {
+              requestAnimationFrame(enterOffice)
+            }
+          }
+        }
+        enterOffice()
+      }
+    }
+  }, [isPresent, hasArrived, position, onArrival])
+
+  // Animation cycling after arrival
+  useEffect(() => {
+    if (!hasArrived) return
+
     const interval = setInterval(() => {
       const animations = ['idle', 'walking', 'gesturing', 'pointing', 'crossedArms', 'talking'] as const
       const randomAnimation = animations[Math.floor(Math.random() * animations.length)]
       setCurrentAnimation(randomAnimation)
-
-      // If walking, set a new random target position
-      if (randomAnimation === 'walking') {
-        setTargetPosition(new THREE.Vector3(
-          (Math.random() - 0.5) * 8, // Random X between -4 and 4
-          position[1],
-          (Math.random() - 0.5) * 8  // Random Z between -4 and 4
-        ))
-      }
-    }, 3000 + Math.random() * 2000) // Random interval between 3-5 seconds
+    }, 3000 + Math.random() * 2000)
 
     return () => clearInterval(interval)
-  }, [position])
+  }, [hasArrived])
 
   useFrame((state, delta) => {
-    if (!groupRef.current) return
+    if (!groupRef.current || !isPresent) return
 
     setAnimationTime(prev => prev + delta)
 
@@ -71,6 +108,14 @@ export function BossCharacter({ position = [0, 0, 0], scale = 1 }: BossCharacter
     }
 
     switch (currentAnimation) {
+      case 'entering':
+        // Walking animation while entering
+        if (leftLeg) leftLeg.rotation.x = Math.sin(animationTime * 8) * 0.5
+        if (rightLeg) rightLeg.rotation.x = Math.sin(animationTime * 8 + Math.PI) * 0.5
+        if (leftArm) leftArm.rotation.x = Math.sin(animationTime * 8 + Math.PI) * 0.3
+        if (rightArm) rightArm.rotation.x = Math.sin(animationTime * 8) * 0.3
+        break
+
       case 'walking':
         // Walking animation
         const walkSpeed = 2
@@ -147,8 +192,21 @@ export function BossCharacter({ position = [0, 0, 0], scale = 1 }: BossCharacter
     }
   })
 
+  if (!isPresent) return null
+
   return (
     <group ref={groupRef} position={position} scale={scale}>
+      {/* Boss name label */}
+      <Text
+        position={[0, 2.8, 0]}
+        fontSize={0.4}
+        color="#ff0000"
+        anchorX="center"
+        anchorY="middle"
+      >
+        EL ESTIMADO
+      </Text>
+
       {/* Head */}
       <mesh ref={headRef} position={[0, 1.7, 0]} castShadow>
         <sphereGeometry args={[0.25, 16, 16]} />
