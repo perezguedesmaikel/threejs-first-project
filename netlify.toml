@@ -1,0 +1,34 @@
+# Netlify configuration for Next.js 14 App Router project
+# This makes deployments easy: just connect the repo in Netlify and it will auto-detect settings.
+
+[build]
+  command = "npm run build"
+  publish = ".next"
+  # Netlify will use the Next.js Runtime to handle SSR/ISR automatically.
+
+[build.environment]
+  NODE_VERSION = "18"
+  NPM_FLAGS = "--legacy-peer-deps"
+
+# Enable the Next.js runtime (Edge/SSR) on Netlify
+[plugins]
+  package = "@netlify/plugin-nextjs"
+
+# Redirect all requests to Next.js handler (for client-side routing)
+[[redirects]]
+  from = "/_next/*"
+  to = "/_next/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/static/*"
+  to = "/static/:splat"
+  status = 200
+  force = true
+
+# Catch-all to Next.js
+[[redirects]]
+  from = "/*"
+  to = "/.netlify/functions/next"
+  status = 200
