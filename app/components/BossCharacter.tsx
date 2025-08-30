@@ -27,6 +27,7 @@ export function BossCharacter({ position = [0, 0, 0], scale = 1, isPresent = fal
 
   useEffect(() => {
     if (isPresent && !hasArrived) {
+      console.log('🎬 Boss is starting to enter the office...')
       if (groupRef.current) {
         groupRef.current.position.set(-10, position[1], position[2])
         setCurrentAnimation('entering')
@@ -34,6 +35,7 @@ export function BossCharacter({ position = [0, 0, 0], scale = 1, isPresent = fal
         let progress = 0
         const enterOffice = () => {
           progress += 0.02
+          console.log(`📍 Boss walking progress: ${(progress * 100).toFixed(1)}%`)
           if (progress <= 1 && groupRef.current) {
             const startX = -10
             const endX = position[0]
@@ -41,7 +43,7 @@ export function BossCharacter({ position = [0, 0, 0], scale = 1, isPresent = fal
             groupRef.current.position.x = currentX
 
             if (progress >= 1) {
-              console.log('Boss has fully arrived, calling onArrival...')
+              console.log('👔 Boss has fully arrived, calling onArrival...')
               setHasArrived(true)
               setCurrentAnimation('pointing')
               onArrival?.()
