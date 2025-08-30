@@ -36,20 +36,25 @@ export function BossCharacter({ position = [0, 0, 0], scale = 1, isPresent = fal
         const enterOffice = () => {
           progress += 0.02
           console.log(`📍 Boss walking progress: ${(progress * 100).toFixed(1)}%`)
-          if (progress <= 1 && groupRef.current) {
+
+          if (groupRef.current) {
             const startX = -10
             const endX = position[0]
             const currentX = startX + (endX - startX) * progress
             groupRef.current.position.x = currentX
 
-            if (progress >= 1) {
+            // Check if boss has arrived (use >= 0.99 to account for floating point precision)
+            if (progress >= 0.99) {
               console.log('👔 Boss has fully arrived, calling onArrival...')
               setHasArrived(true)
               setCurrentAnimation('pointing')
               onArrival?.()
+              return // Stop the animation loop
             } else {
               requestAnimationFrame(enterOffice)
             }
+          } else {
+            console.log('❌ groupRef.current is null, stopping animation')
           }
         }
         enterOffice()
